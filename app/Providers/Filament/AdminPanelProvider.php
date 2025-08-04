@@ -66,6 +66,7 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Profile')
                     ->url(fn(): string => Profile::getUrl())
                     ->icon('hugeicons-user-settings-01'),
-            ]);
+            ])
+            ->databaseNotifications();
     }
 }
