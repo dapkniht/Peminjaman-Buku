@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Exports\LoanExporter;
+use App\Filament\Imports\LoanImporter;
 use App\Filament\Resources\LoanResource\Pages;
 use App\Filament\Resources\LoanResource\RelationManagers;
 use App\Models\Loan;
@@ -11,6 +12,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -85,6 +87,8 @@ class LoanResource extends Resource
                 Tables\Actions\DeleteAction::make()
             ])
             ->headerActions([
+                ImportAction::make()
+                    ->importer(LoanImporter::class),
                 ExportAction::make()
                     ->exporter(LoanExporter::class)
                     ->maxRows(100000)

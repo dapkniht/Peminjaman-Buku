@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Exports\BookExporter;
+use App\Filament\Imports\BookImporter;
 use App\Filament\Resources\BookResource\Pages;
 use App\Filament\Resources\BookResource\RelationManagers;
 use App\Models\Book;
@@ -11,6 +12,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -103,6 +105,8 @@ class BookResource extends Resource
                 Tables\Actions\DeleteAction::make()
             ])
             ->headerActions([
+                ImportAction::make()
+                    ->importer(BookImporter::class),
                 ExportAction::make()
                     ->exporter(BookExporter::class)
                     ->maxRows(100000)

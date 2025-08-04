@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Exports\AuthorExporter;
+use App\Filament\Imports\AuthorImporter;
 use App\Filament\Resources\AuthorResource\Pages;
 use App\Filament\Resources\AuthorResource\RelationManagers;
 use App\Models\Author;
@@ -13,6 +14,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -83,7 +85,8 @@ class AuthorResource extends Resource
 
             ])
             ->headerActions([
-
+                ImportAction::make()
+                    ->importer(AuthorImporter::class),
                 ExportAction::make()
                     ->exporter(AuthorExporter::class)
                     ->maxRows(100000)

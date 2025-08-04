@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Exports\AdminExporter;
+use App\Filament\Imports\AdminImporter;
 use App\Filament\Resources\AdminResource\Pages;
 use App\Filament\Resources\AdminResource\RelationManagers;
 use App\Models\User;
@@ -12,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -90,6 +92,8 @@ class AdminResource extends Resource
                 Tables\Actions\DeleteAction::make()
             ])
             ->headerActions([
+                ImportAction::make()
+                    ->importer(AdminImporter::class),
                 ExportAction::make()
                     ->exporter(AdminExporter::class)
                     ->maxRows(100000)
