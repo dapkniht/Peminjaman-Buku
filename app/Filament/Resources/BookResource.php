@@ -71,31 +71,55 @@ class BookResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->copyable()
+                    ->copyMessage('Id copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\ImageColumn::make('cover_url')
                     ->label("Cover")
                     ->width(50)
                     ->height(50),
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Title copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('category.name')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Category copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('author.name')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Author copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('isbn')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Isbn copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('stock')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->copyable()
+                    ->copyMessage('Stock copied')
+                    ->copyMessageDuration(1500),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->copyable()
+                    ->copyMessage('Created At copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->copyable()
+                    ->copyMessage('Updated At copied')
+                    ->copyMessageDuration(1500),
             ])->defaultSort('created_at', 'desc')
             ->filters([
                 //

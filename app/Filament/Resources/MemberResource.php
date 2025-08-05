@@ -77,15 +77,30 @@ class MemberResource extends Resource
                 TextColumn::make('id')
                     ->label('ID')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->copyable()
+                    ->copyMessage('Id copied')
+                    ->copyMessageDuration(1500),
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Name')
+                    ->copyMessageDuration(1500),
                 TextColumn::make('email')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Email copied')
+                    ->copyMessageDuration(1500),
                 TextColumn::make('nisn')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Nisn copied')
+                    ->copyMessageDuration(1500),
                 TextColumn::make('kelas')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Kelas copied')
+                    ->copyMessageDuration(1500),
 
                 TextColumn::make('created_at')
                     ->dateTime()
