@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\LoanStatus;
 use App\Filament\Exports\LoanExporter;
 use App\Filament\Resources\ReturnResource\Pages;
 use App\Filament\Resources\ReturnResource\RelationManagers;
@@ -62,38 +63,76 @@ class ReturnResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->copyable()
+                    ->copyMessage('Id copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label("Member")
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Member copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('book.title')
                     ->label('Book')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Book copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('borrow_date')
                     ->label("Borrow Date")
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->copyable()
+                    ->copyMessage('Borrow Date copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('return_date')
                     ->label("Return Date")
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->copyable()
+                    ->copyMessage('Return Date copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('actual_return')
                     ->label("Actual Return")
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->placeholder("Not Yet Returned")
+                    ->copyable()
+                    ->copyMessage('Actual Return copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('late_fee')
                     ->label("Late Fee")
                     ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('status'),
+                    ->sortable()
+                    ->money('IDR')
+                    ->copyable()
+                    ->copyMessage('Late Fee copied')
+                    ->copyMessageDuration(1500),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn(LoanStatus $state): string => match ($state) {
+                        LoanStatus::Borrowed => 'warning',
+                        LoanStatus::Returned => 'success',
+                        LoanStatus::Late     => 'danger',
+                    })
+                    ->copyable()
+                    ->copyMessage('Status copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->copyable()
+                    ->copyMessage('Created At copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->copyable()
+                    ->copyMessage('Updated At copied')
+                    ->copyMessageDuration(1500),
             ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
