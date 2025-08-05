@@ -14,20 +14,22 @@ class EditAuthor extends EditRecord
     {
         return [
             Actions\DeleteAction::make(),
+            Actions\ForceDeleteAction::make(),
+            Actions\RestoreAction::make(),
         ];
     }
 
     protected function getRedirectUrl(): string
-        {
-            return $this->getResource()::getUrl('index');
-        }
+    {
+        return $this->getResource()::getUrl('index');
+    }
 
     protected function mutateFormDataBeforeSave(array $data): array
-        {
-           
+    {
 
-            if(!$data['photo']) $data['photo'] = "author/default.jpeg";
-        
-            return $data;
-        }
+
+        if (!$data['photo']) $data['photo'] = "author/default.jpeg";
+
+        return $data;
+    }
 }
