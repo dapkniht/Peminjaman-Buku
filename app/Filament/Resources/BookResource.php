@@ -16,6 +16,7 @@ use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Filters\TrashedFilter;
 
 class BookResource extends Resource
 {
@@ -122,7 +123,7 @@ class BookResource extends Resource
                     ->copyMessageDuration(1500),
             ])->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                TrashedFilter::make()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

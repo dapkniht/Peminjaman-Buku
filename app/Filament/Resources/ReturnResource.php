@@ -15,6 +15,7 @@ use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Filters\TrashedFilter;
 
 class ReturnResource extends Resource
 {
@@ -135,7 +136,7 @@ class ReturnResource extends Resource
                     ->copyMessageDuration(1500),
             ])->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                TrashedFilter::make()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

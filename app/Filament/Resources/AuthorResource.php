@@ -16,6 +16,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -89,11 +90,13 @@ class AuthorResource extends Resource
                     ->copyMessageDuration(1500),
             ])->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                TrashedFilter::make()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
 
             ])
             ->headerActions([
@@ -101,11 +104,13 @@ class AuthorResource extends Resource
                     ->importer(AuthorImporter::class),
                 ExportAction::make()
                     ->exporter(AuthorExporter::class)
-                    ->maxRows(100000)
+                    ->maxRows(100000),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -125,5 +130,13 @@ class AuthorResource extends Resource
             'edit' => Pages\EditAuthor::route('/{record}/edit'),
             'view' => Pages\ViewAuthor::route('/{record}'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
