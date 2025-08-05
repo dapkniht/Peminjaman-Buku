@@ -19,6 +19,9 @@ use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\Filter;
 
 class LoanResource extends Resource
 {
@@ -112,7 +115,26 @@ class LoanResource extends Resource
                     ->copyMessageDuration(1500),
             ])->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                TrashedFilter::make(),
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('borrow_date_start')
+                            ->label('Borrow Date Start')
+                            ->default(now()),
+                        DatePicker::make('borrow_date_end')
+                            ->label('Borrow Date End'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['borrow_date_start'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('borrow_date', '>=', $date),
+                            )
+                            ->when(
+                                $data['borrow_date_end'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('borrow_date', '<=', $date),
+                            );
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
