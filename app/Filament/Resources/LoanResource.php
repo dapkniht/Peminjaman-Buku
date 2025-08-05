@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\LoanStatus;
 use App\Filament\Exports\LoanExporter;
 use App\Filament\Imports\LoanImporter;
 use App\Filament\Resources\LoanResource\Pages;
 use App\Filament\Resources\LoanResource\RelationManagers;
 use App\Models\Loan;
+use App\Models\Setting;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -45,9 +48,11 @@ class LoanResource extends Resource
                     ->relationship(name: 'book', titleAttribute: 'title')
                     ->preload(),
                 Forms\Components\DatePicker::make('borrow_date')
-                    ->required(),
+                    ->required()
+                    ->default(Carbon::now()),
                 Forms\Components\DatePicker::make('return_date')
-                    ->required(),
+                    ->required()
+                    ->default(fn(?Setting $record) => Carbon::now()->addDays($record?->loan_duration_days ?? 7)),
             ]);
     }
 
@@ -58,26 +63,53 @@ class LoanResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->copyable()
+                    ->copyMessage('Id copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label("Member")
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Member copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('book.title')
                     ->label('Book')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Book copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('borrow_date')
                     ->label("Borrow Date")
                     ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('status'),
+                    ->sortable()
+                    ->copyable()
+                    ->copyMessage('Borrow Date copied')
+                    ->copyMessageDuration(1500),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn(LoanStatus $state): string => match ($state) {
+                        LoanStatus::Borrowed => 'warning',
+                        LoanStatus::Returned => 'success',
+                        LoanStatus::Late     => 'danger',
+                    })
+                    ->copyable()
+                    ->copyMessage('Status copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->copyable()
+                    ->copyMessage('Created At copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->copyable()
+                    ->copyMessage('Updated At copied')
+                    ->copyMessageDuration(1500),
             ])->defaultSort('created_at', 'desc')
             ->filters([
                 //
