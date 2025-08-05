@@ -5,6 +5,8 @@ namespace App\Filament\Resources\LoanResource\Pages;
 use App\Filament\Resources\LoanResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Components\Tab;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListLoans extends ListRecords
 {
@@ -14,6 +16,19 @@ class ListLoans extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+
+    public function getTabs(): array
+    {
+        return [
+            'all' => Tab::make(),
+            'borrowed' => Tab::make()
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'borrowed')),
+            'returned' => Tab::make()
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'returned')),
+            'late' => Tab::make()
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'late')),
         ];
     }
 }
