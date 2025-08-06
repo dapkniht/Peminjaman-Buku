@@ -138,7 +138,9 @@ class LoanResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->headerActions([
                 ImportAction::make()
@@ -150,8 +152,10 @@ class LoanResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ]);;
     }
 
     public static function getRelations(): array
@@ -168,5 +172,13 @@ class LoanResource extends Resource
             'create' => Pages\CreateLoan::route('/create'),
             'edit' => Pages\EditLoan::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
