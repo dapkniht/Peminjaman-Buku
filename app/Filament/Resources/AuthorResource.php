@@ -74,6 +74,11 @@ class AuthorResource extends Resource
                     ->copyable()
                     ->copyMessage('Name copied')
                     ->copyMessageDuration(1500),
+                Tables\Columns\TextColumn::make('bio')
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Bio copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -93,11 +98,11 @@ class AuthorResource extends Resource
                 TrashedFilter::make()
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\ForceDeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
-
             ])
             ->headerActions([
                 ImportAction::make()
