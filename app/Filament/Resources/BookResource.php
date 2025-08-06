@@ -7,6 +7,7 @@ use App\Filament\Imports\BookImporter;
 use App\Filament\Resources\BookResource\Pages;
 use App\Filament\Resources\BookResource\RelationManagers;
 use App\Models\Book;
+use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -87,14 +88,10 @@ class BookResource extends Resource
                     ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('category.name')
                     ->searchable()
-                    ->copyable()
-                    ->copyMessage('Category copied')
-                    ->copyMessageDuration(1500),
+                    ->url(fn(Book $record): string => CategoryResource::getUrl('view', ['record' => $record->category_id])),
                 Tables\Columns\TextColumn::make('author.name')
                     ->searchable()
-                    ->copyable()
-                    ->copyMessage('Author copied')
-                    ->copyMessageDuration(1500),
+                    ->url(fn(Book $record): string => AuthorResource::getUrl('view', ['record' => $record->author_id])),
                 Tables\Columns\TextColumn::make('isbn')
                     ->searchable()
                     ->copyable()
@@ -127,7 +124,9 @@ class BookResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->headerActions([
                 ImportAction::make()
@@ -139,8 +138,10 @@ class BookResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ]);;
     }
 
     public static function getRelations(): array
@@ -157,5 +158,13 @@ class BookResource extends Resource
             'create' => Pages\CreateBook::route('/create'),
             'edit' => Pages\EditBook::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

@@ -14,20 +14,23 @@ class EditBook extends EditRecord
     {
         return [
             Actions\DeleteAction::make(),
+            Actions\ForceDeleteAction::make(),
+            Actions\RestoreAction::make(),
+
         ];
     }
 
     protected function getRedirectUrl(): string
-        {
-            return $this->getResource()::getUrl('index');
-        }
+    {
+        return $this->getResource()::getUrl('index');
+    }
 
     protected function mutateFormDataBeforeSave(array $data): array
-        {
-           
+    {
 
-            if(!$data['cover_url']) $data['cover_url'] = "book/default.png";
-        
-            return $data;
-        }
+
+        if (!$data['cover_url']) $data['cover_url'] = "book/default.png";
+
+        return $data;
+    }
 }
