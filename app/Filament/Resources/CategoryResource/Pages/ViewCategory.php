@@ -1,32 +1,28 @@
 <?php
 
-namespace App\Filament\Resources\AuthorResource\Pages;
+namespace App\Filament\Resources\CategoryResource\Pages;
 
-use App\Filament\Exports\AuthorExporter;
-use App\Filament\Imports\AuthorImporter;
+use App\Filament\Exports\CategoryExporter;
+use App\Filament\Imports\CategoryImporter;
 use App\Filament\Resources\AuthorResource;
 use App\Filament\Resources\CategoryResource;
-use Filament\Actions;
-use Filament\Forms\Contracts\HasForms;
+use App\Models\Book;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Table;
 use Filament\Tables;
-use App\Models\Author;
-use App\Models\Book;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Filters\TrashedFilter;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class ViewAuthor extends ViewRecord implements HasTable
+class ViewCategory extends ViewRecord implements HasTable
 {
     use InteractsWithTable;
 
-    protected static string $resource = AuthorResource::class;
-    protected static string $view = 'filament.resources.author-resource.pages.view-author';
+    protected static string $resource = CategoryResource::class;
+    protected static string $view = 'filament.resources.category-resource.pages.view-category';
 
 
 
@@ -55,12 +51,12 @@ class ViewAuthor extends ViewRecord implements HasTable
                     ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('category.name')
                     ->searchable()
-                    ->url(fn(Book $record): string => CategoryResource::getUrl('view', ['record' => $record->category_id])),
+                    ->copyable()
+                    ->copyMessage('Category copied')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('author.name')
                     ->searchable()
-                    ->copyable()
-                    ->copyMessage('Author copied')
-                    ->copyMessageDuration(1500),
+                    ->url(fn(Book $record): string => AuthorResource::getUrl('view', ['record' => $record->author_id])),
                 Tables\Columns\TextColumn::make('isbn')
                     ->searchable()
                     ->copyable()
@@ -99,9 +95,9 @@ class ViewAuthor extends ViewRecord implements HasTable
             ])
             ->headerActions([
                 ImportAction::make()
-                    ->importer(AuthorImporter::class),
+                    ->importer(CategoryImporter::class),
                 ExportAction::make()
-                    ->exporter(AuthorExporter::class)
+                    ->exporter(CategoryExporter::class)
                     ->maxRows(100000),
             ])
             ->bulkActions([
