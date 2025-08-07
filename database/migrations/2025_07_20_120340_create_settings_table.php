@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements("id")->primary();
             $table->string("key", 100)->unique();
             $table->string("value");
+            $table->string('description');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -11,6 +11,7 @@ class Setting extends Model
     use SoftDeletes;
     protected $fillable = [
         "key",
-        "value"
+        "value",
+        "description"
     ];
 }

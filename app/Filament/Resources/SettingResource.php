@@ -32,6 +32,9 @@ class SettingResource extends Resource
                     ->unique(table: Setting::class)
                     ->disabled()
                     ->maxLength(100),
+                Forms\Components\TextInput::make('description')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('value')
                     ->required()
                     ->maxLength(255),
@@ -43,7 +46,8 @@ class SettingResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('key')
-                    ->searchable(),
+                    ->searchable()
+                    ->description(fn(Setting $record): string => $record->description),
                 Tables\Columns\TextColumn::make('value')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('deleted_at')
