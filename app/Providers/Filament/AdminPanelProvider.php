@@ -67,6 +67,9 @@ class AdminPanelProvider extends PanelProvider
                     ->url(fn(): string => Profile::getUrl())
                     ->icon('hugeicons-user-settings-01'),
             ])
-            ->databaseNotifications();
+            ->databaseNotifications()
+            ->brandLogo(fn() => view('filament.admin.logo'))
+            ->darkModeBrandLogo(fn() => view('filament.admin.logo'))
+            ->favicon(asset('favicon.ico'));
     }
 }
